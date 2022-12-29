@@ -14,15 +14,17 @@ Search for an anime
 >>> print(anime[0].title)
 
 ...Or get user anime list
->>> anime_list = await mal.get.user_anime_list(\'Username\')
+>>> anime_list = await mal.get.anime_list(\'Username\')
 >>> print(anime_list[0].title)
 
 Avaiable commands
->>> search.user()
->>> search.anime()
->>> search.manga()
->>> get.user_anime_list()
->>> get.user_manga_list()
+\n`search.user()` - Search for an user
+\n`search.anime()` - Search for an anime
+\n`search.manga()` - Search fo a manga
+\n`get.user()` - Get an user profile
+\n`get.username()` - Get username by id
+\n`get.anime_list()` - Get an user anime list
+\n`get.manga_list()` - Get an user manga list
 '''
 
 from myanimelist.cogs.client import *
