@@ -33,7 +33,7 @@ class Search:
         try:
             url = self.connection.jikan_api + f'/users?q={username}'
             res = get_json(requests.get(url))
-            print(indent(res))
+            #print(indent(res))
             res = get_list(res['data'], 'user')
             if len(res) == 0:
                 raise requests.exceptions.HTTPError
@@ -42,7 +42,7 @@ class Search:
             url = self.connection.jikan_api + f'/users/{username}/full' if full else self.connection.jikan_api + f'/users/{username}'
             res = get_json(requests.get(url))
             if res == None:
-                print('NOT FOUND')
+                #print('NOT FOUND')
                 res = MalList()
             else:
                 res = get_list([res['data']], 'user')
@@ -66,7 +66,7 @@ class Search:
         if len(title) < 3:
             return None
 
-        query = f'q={title}&limit={limit}&fields=id,title,mean,num_episodes'
+        query = f'q={title}&limit={limit}&fields=id,title,mean,num_episodes,rank,popularity,num_list_users,num_scoring_users,start_date,end_date,alternative_titles' 
         url = self.connection.mal_api + f'/anime?{query}'
 
         res = get_json(requests.get(url, headers=self.connection.header))
@@ -90,7 +90,7 @@ class Search:
         if len(title) < 3:
             return None
 
-        query = f'q={title}&limit={limit}&fields=id,title,mean,num_episodes'
+        query = f'q={title}&limit={limit}&fields=id,title,mean,num_chapters,num_volumes,rank,popularity,num_list_users,num_scoring_users,start_date,end_date,alternative_titles'
         url = self.connection.mal_api + f'/manga?{query}'
 
         res = get_json(requests.get(url, headers=self.connection.header))

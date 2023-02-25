@@ -54,7 +54,7 @@ class Get:
             c += 1
 
         url = self.connection.mal_api + f'/manga/{id}?{fields_query}'
-        print(url)
+        #print(url)
         res = get_json(requests.get(url, headers=self.connection.header))
 
         return Manga({'node': res}) if res != None else res
@@ -75,7 +75,7 @@ class Get:
         if  len(username) < 3:
             return None
             
-        url = self.connection.jikan_api + f'/users/{username}/full' if full else self.connection.jikan_api + f'/users/{username}'
+        url = self.connection.jikan_api + f'/users/{username}/full' if full else self.connection.jikan_api + f'/users/{username}/full'
         res = get_json(requests.get(url))
         try:
             res = User(res['data'])
@@ -96,7 +96,7 @@ class Get:
         :rtype: str 
         '''
         if id == 0:
-            print(str(id))
+            #print(str(id))
             return None
             
         url = self.connection.jikan_api + f'/users/userbyid/{id}'
@@ -135,7 +135,7 @@ class Get:
         url = self.connection.mal_api + f'/users/{username}/animelist?{query}'
 
         res = get_json(requests.get(url, headers=self.connection.header))
-        print(indent(res))
+        #print(indent(res))
         res = get_list(res['data'], 'anime') if res != None else res
 
         return res
@@ -170,4 +170,4 @@ class Get:
         res = get_json(requests.get(url, headers=self.connection.header))
         res = get_list(res['data'], 'manga') if res != None else res
 
-        return res 
+        return res

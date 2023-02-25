@@ -44,8 +44,8 @@ class ListStatus:
 
 class Statistics:
     def __init__(self, data: dict) -> None:
-        self.animes:AnimesStatic = AnimesStatic(get_value(data, 'anime'))
-        self.mangas:MangasStatic = MangasStatic(get_value(data, 'manga'))
+        self.animes :AnimesStatic = AnimesStatic(get_value(data, 'anime'))
+        self.mangas :MangasStatic = MangasStatic(get_value(data, 'manga'))
 
 
 class AnimesStatic:
@@ -129,7 +129,6 @@ class Anime(MalObj):
 
 class Manga(MalObj):
     def __init__(self, data: dict) -> None:
-        #print(indent(data))
         manga  = get_value(data, 'node')
         list_status = get_value(data, 'list_status')
 
@@ -137,6 +136,40 @@ class Manga(MalObj):
         self.num_chapters :int        = get_value(manga, 'num_chapters')
         self.num_volumes  :int        = get_value(manga, 'num_volumes')
         self.list_status  :ListStatus = ListStatus(list_status, manga) if list_status else None
+
+
+class FavObj:
+    def __init__(self, data: dict) -> None:
+        self.id         :int = get_value(data, 'mal_id')
+        self.url        :str = get_value(data, 'url')
+        self.images     :str = get_value(get_value(get_value(data, 'images'), 'jpg'), 'image_url')
+        self.title      :str = get_value(data, 'title')
+        self.type       :str = get_value(data, 'type')
+        self.start_year :int = get_value(data, 'start_year')
+
+
+class People:
+    def __init__(self, data: dict) -> None:
+        self.id     :int = get_value(data, 'mal_id')
+        self.url    :str = get_value(data, 'url')
+        self.images :str = get_value(get_value(get_value(data, 'images'), 'jpg'), 'image_url')
+        self.name   :str = get_value(data, 'name')
+
+
+class Character:
+    def __init__(self, data: dict) -> None:
+        self.id :int = get_value(data, 'mal_id')
+        self.url    :str = get_value(data, 'url')
+        self.images :str = get_value(get_value(get_value(data, 'images'), 'jpg'), 'image_url')
+        self.name   :str = get_value(data, 'name')
+
+
+class Favorites:
+    def __init__(self, data: dict) -> None:
+        self.animes     :MalList = get_list(data['anime'], 'favobj')
+        self.mangas     :MalList = get_list(data['manga'], 'favobj')
+        self.peoples    :MalList = get_list(data['people'], 'people')
+        self.characters :MalList = get_list(data['characters'], 'character')
 
 
 class User:
@@ -148,7 +181,7 @@ class User:
         self.last_online :date       = get_value(data, 'last_online', 'datetime')
         self.gender      :str        = get_value(data, 'gender')
         self.joined      :date       = get_value(data, 'joined', 'datetime')
-        self.favorites   :dict       = get_value(data, 'favorites')
+        self.favorites   :Favorites  = Favorites(get_value(data, 'favorites'))
         self.statistics  :Statistics = Statistics(get_value(data, 'statistics'))
 
 
@@ -187,6 +220,15 @@ def get_list(data: dict, type: str) -> MalList:
     elif type == 'user':
         for user in data:
             content.append(User(user))
+    elif type == 'favobj':
+        for obj in data:
+            content.append(FavObj(obj))
+    elif type == 'people':
+        for people in data:
+            content.append(People(people))
+    elif type == 'character':
+        for character in data:
+            content.append(Character(character))
     else:
         raise UnknownListType(type)
     return content
@@ -198,7 +240,10 @@ def get_value(data: dict, key: str, converter:str = None) -> str:
 
         if converter != None and res != None:
             if converter == 'datetime':
-                res = datetime.strptime(res[:10], '%Y-%m-%d').date()
+                try:
+                    res = datetime.strptime(res[:10], '%Y/%m/%d').date()
+                except:
+                    None
 
         return res
     except (KeyError, TypeError):
