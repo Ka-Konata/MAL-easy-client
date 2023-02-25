@@ -9,7 +9,7 @@ async def main():
     #for item in search:
     #print(username)
     
-    """search = await mal.get.user(username='Ka_Knata', full=True)
+    search = await mal.get.user(username='Ka_Knata', full=True)
     print(f'''
         {search.id} {type(search.id)}
         {search.username} {type(search.username)}
@@ -20,7 +20,7 @@ async def main():
         {search.joined} {type(search.joined)}
         {myanimelist.indent(search.favorites)} {type(search.favorites)}
         {search.statistics} {type(search.statistics)}
-    ''')"""
+    ''')
 
     """search = await mal.get.anime_list('Ka_Knata', limit=1, fields=myanimelist.Fields.anime.basic())
     for item in search:
